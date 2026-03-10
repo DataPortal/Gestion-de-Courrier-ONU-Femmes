@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion du courrier - ONU Femmes</title>
+  <meta name="description" content="Mini application de gestion du courrier" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">ONU Femmes</div>
+        <h1>Mini application de gestion du courrier</h1>
+        <p>
+          Interface simple pour enregistrer, suivre et exporter les courriers.
+          Les scans restent stockés en local et l'application conserve le registre
+          administratif.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn primary" id="btnNew">Nouveau courrier</button>
+        <button class="btn" id="btnExport">Exporter CSV</button>
+        <label class="btn file-btn">
+          Importer CSV
+          <input type="file" id="csvImport" accept=".csv" hidden />
+        </label>
+        <button class="btn danger" id="btnReset">Réinitialiser</button>
+      </div>
+    </header>
+
+    <section class="stats">
+      <div class="stat-card">
+        <div class="muted">Total courriers</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="muted">En cours</div>
+        <div class="stat-value" id="statEnCours">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="muted">Répondu / Clos</div>
+        <div class="stat-value" id="statRepondu">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="muted">En retard</div>
+        <div class="stat-value" id="statRetard">0</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="filters">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Rechercher par ID, institution, objet, responsable..."
+        />
+        <select id="statusFilter">
+          <option value="Tous">Tous les statuts</option>
+          <option value="Reçu">Reçu</option>
+          <option value="Transmis">Transmis</option>
+          <option value="En cours">En cours</option>
+          <option value="Validation">Validation</option>
+          <option value="Répondu">Répondu</option>
+          <option value="Clos">Clos</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="panel hidden" id="formPanel">
+      <div class="panel-header">
+        <h2>Nouveau courrier</h2>
+        <button class="btn" id="btnCloseForm">Fermer</button>
+      </div>
+
+      <form id="courrierForm" class="form-grid">
+        <div class="field">
+          <label for="id">ID courrier</label>
+          <input type="text" id="id" name="id" readonly />
+        </div>
+
+        <div class="field">
+          <label for="dateReception">Date réception</label>
+          <input type="date" id="dateReception" name="dateReception" required />
+        </div>
+
+        <div class="field">
+          <label for="type">Type d’expéditeur</label>
+          <select id="type" name="type">
+            <option>Ambassade</option>
+            <option>Chancellerie</option>
+            <option>Ministère</option>
+            <option>Agence ONU</option>
+            <option>ONG/Autre</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="institution">Institution</label>
+          <input type="text" id="institution" name="institution" required />
+        </div>
+
+        <div class="field full">
+          <label for="objet">Objet</label>
+          <input type="text" id="objet" name="objet" required />
+        </div>
+
+        <div class="field">
+          <label for="responsable">Responsable</label>
+          <input type="text" id="responsable" name="responsable" value="Secrétaire de la Représentante" />
+        </div>
+
+        <div class="field">
+          <label for="dateLimite">Date limite</label>
+          <input type="date" id="dateLimite" name="dateLimite" />
+        </div>
+
+        <div class="field">
+          <label for="statut">Statut</label>
+          <select id="statut" name="statut">
+            <option>Reçu</option>
+            <option>Transmis</option>
+            <option>En cours</option>
+            <option>Validation</option>
+            <option>Répondu</option>
+            <option>Clos</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="dateReponse">Date réponse</label>
+          <input type="date" id="dateReponse" name="dateReponse" />
+        </div>
+
+        <div class="field full">
+          <label for="cheminScan">Chemin local du scan</label>
+          <input
+            type="text"
+            id="cheminScan"
+            name="cheminScan"
+            placeholder="D:\COURRIERS_REPRESENTANTE\2026\03_Mars\Entrants\20260310_CR-2026-001_AmbassadeFrance_DemandeAudience.pdf"
+          />
+        </div>
+
+        <div class="field full">
+          <label for="cheminReponse">Chemin local de la réponse</label>
+          <input
+            type="text"
+            id="cheminReponse"
+            name="cheminReponse"
+            placeholder="D:\COURRIERS_REPRESENTANTE\2026\03_Mars\Reponses\20260315_CR-2026-001_Reponse_SIGNEE.pdf"
+          />
+        </div>
+
+        <div class="field full">
+          <label for="observations">Observations</label>
+          <textarea id="observations" name="observations" rows="4"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Enregistrer</button>
+          <button type="button" class="btn" id="btnCancelForm">Annuler</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Registre des courriers</h2>
+        <span id="resultCount">0 élément(s)</span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Institution</th>
+              <th>Objet</th>
+              <th>Responsable</th>
+              <th>Date limite</th>
+              <th>Statut</th>
+              <th>Scan local</th>
+              <th>Détails</th>
+              <th>Supprimer</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
