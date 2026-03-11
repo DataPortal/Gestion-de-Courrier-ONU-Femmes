@@ -195,6 +195,49 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .month-records {
+      display: grid;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .month-record {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #ffffff;
+    }
+
+    .month-record-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .month-record-id {
+      font-weight: 800;
+      color: var(--uw-blue-dark);
+      font-size: 13px;
+    }
+
+    .month-record-obj {
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
+
+    .month-record-meta {
+      display: grid;
+      gap: 2px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
     .kpi-box {
@@ -474,7 +517,7 @@
     <header class="hero">
       <div>
         <div class="brand-row">
-          <img src="assets/img/unwomen-logo.png" alt="UN Women" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid'" />
+          <img src="assets/img/logo.png" alt="UN Women" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid'" />
           <div id="logoFallback" style="display:none;width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--uw-blue),var(--uw-blue-dark));color:#fff;font-weight:800;place-items:center;">UNW</div>
           <div>
             <div class="eyebrow">ONU Femmes • Bureau de la Représentante</div>
@@ -1065,6 +1108,28 @@
         totalOverdue += overdue;
         if (!busiest || total > busiest.total) busiest = { monthKey, total };
 
+        const monthItemsHtml = items
+          .sort((a, b) => String(b.dateReception || '').localeCompare(String(a.dateReception || '')))
+          .map((r) => `
+            <div class="month-record">
+              <div class="month-record-top">
+                <div>
+                  <div class="month-record-id">${escapeHtml(r.id || '—')}</div>
+                  <div class="month-record-obj">${escapeHtml(r.objet || '—')}</div>
+                </div>
+                <div class="badge ${isOverdue(r) ? 'overdue' : (['Répondu','Clos'].includes(r.statut) ? 'ok' : 'pending')}">
+                  ${isOverdue(r) ? '⚠ Retard' : escapeHtml(r.statut || '—')}
+                </div>
+              </div>
+              <div class="month-record-meta">
+                <div><strong>Institution :</strong> ${escapeHtml(r.institution || '—')}</div>
+                <div><strong>Date réception :</strong> ${escapeHtml(r.dateReception || '—')}</div>
+                <div><strong>Date limite :</strong> ${escapeHtml(r.dateLimite || '—')}</div>
+                <div><strong>Responsable :</strong> ${escapeHtml(r.responsable || '—')}</div>
+              </div>
+            </div>
+          `).join('');
+
         const card = document.createElement('div');
         card.className = 'month-card';
         card.innerHTML = `
@@ -1081,6 +1146,7 @@
             <div class="kpi-box"><span class="muted">Traités</span><strong>${closed}</strong></div>
             <div class="kpi-box"><span class="muted">En retard</span><strong>${overdue}</strong></div>
           </div>
+          <div class="month-records">${monthItemsHtml || '<div class="muted">Aucune donnée.</div>'}</div>
         `;
         monthGrid.appendChild(card);
       });
