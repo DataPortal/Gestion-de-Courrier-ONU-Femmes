@@ -39,36 +39,39 @@
           Importer CSV
           <input type="file" id="csvImport" accept=".csv" hidden />
         </label>
-        <button class="btn danger" id="btnReset">Réinitialiser</button>
       </div>
     </header>
 
     <section class="panel">
-      <div class="panel-header">
-        <h2>Filtres et recherche</h2>
-        <span class="muted" id="resultCount">0 élément(s)</span>
-      </div>
+  <div class="panel-header">
+    <h2>Filtres et recherche</h2>
+    <span class="muted" id="resultCount">0 élément(s)</span>
+  </div>
 
-      <div class="filters">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Rechercher par ID, institution, objet, responsable..."
-        />
-        <select id="statusFilter">
-          <option value="Tous">Tous les statuts</option>
-          <option value="Reçu">Reçu</option>
-          <option value="Transmis">Transmis</option>
-          <option value="En cours">En cours</option>
-          <option value="Validation">Validation</option>
-          <option value="Répondu">Répondu</option>
-          <option value="Clos">Clos</option>
-        </select>
-        <select id="monthFilter">
-          <option value="Tous">Tous les mois</option>
-        </select>
-      </div>
-    </section>
+  <div class="filters">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Rechercher par ID, institution, objet, responsable..."
+    />
+    <select id="statusFilter">
+      <option value="Tous">Tous les statuts</option>
+      <option value="Reçu">Reçu</option>
+      <option value="Transmis">Transmis</option>
+      <option value="En cours">En cours</option>
+      <option value="Validation">Validation</option>
+      <option value="Répondu">Répondu</option>
+      <option value="Clos">Clos</option>
+    </select>
+    <select id="monthFilter">
+      <option value="Tous">Tous les mois</option>
+    </select>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="monthly-summary" id="monthlySummary"></div>
+</section>
 
     <section class="panel hidden" id="formPanel">
       <div class="panel-header">
@@ -200,14 +203,13 @@
     </section>
 
     <section class="panel">
-      <div class="panel-header">
-        <h2>Dashboard mensuel</h2>
-        <span class="muted">Récapitulatifs mensuels placés sous le registre</span>
-      </div>
+  <div class="panel-header">
+    <h2>Récapitulatifs mensuels</h2>
+    <span class="muted">Détails mensuels sous le registre</span>
+  </div>
 
-      <div class="monthly-summary" id="monthlySummary"></div>
-      <div class="month-grid" id="monthGrid"></div>
-    </section>
+  <div class="month-grid" id="monthGrid"></div>
+</section>
 
     <section class="print-area" id="printArea"></section>
 
