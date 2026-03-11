@@ -43,14 +43,16 @@ body {
 }
 
 .hero {
-  padding: 26px 28px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
-  gap: 24px;
-  align-items: flex-start;
-  margin-bottom: 18px;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 14px;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--uw-blue) 0%, var(--uw-blue-dark) 100%);
+  color: #fff;
 }
 
 .hero::after {
@@ -58,10 +60,10 @@ body {
   position: absolute;
   top: -40px;
   right: -40px;
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 130, 32, 0.16) 0%, rgba(245, 130, 32, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 70%);
   pointer-events: none;
 }
 
@@ -73,11 +75,11 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .logo-img {
-  height: 62px;
+  height: 54px;
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
@@ -85,10 +87,10 @@ body {
 }
 
 .eyebrow {
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--uw-blue);
+  color: rgba(255, 255, 255, 0.88);
   font-weight: 800;
 }
 
@@ -99,16 +101,18 @@ h3 {
 }
 
 h1 {
-  font-size: 34px;
-  margin-top: 6px;
-  margin-bottom: 10px;
+  font-size: 28px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  color: #fff;
 }
 
 .subtitle {
   margin: 0;
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 860px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.45;
+  max-width: 760px;
+  font-size: 14px;
 }
 
 .hero-actions {
@@ -116,7 +120,7 @@ h1 {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
-  min-width: 320px;
+  min-width: 300px;
 }
 
 .btn {
@@ -135,15 +139,15 @@ h1 {
 }
 
 .btn.primary {
-  background: var(--uw-blue);
-  color: #fff;
-  border-color: var(--uw-blue);
+  background: #ffffff;
+  color: var(--uw-blue-dark);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .btn.print {
-  background: #f2f7fc;
-  color: var(--uw-blue-dark);
-  border-color: #d3e6f6;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .btn.danger {
@@ -228,7 +232,7 @@ textarea {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1380px;
+  min-width: 1320px;
 }
 
 th,
@@ -255,7 +259,7 @@ tr.overdue-row td {
 }
 
 .path {
-  max-width: 260px;
+  max-width: 280px;
   word-break: break-all;
   font-size: 12px;
   color: var(--muted);
@@ -292,9 +296,15 @@ tr.overdue-row td {
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.18); }
-  70% { box-shadow: 0 0 0 10px rgba(192, 57, 43, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.18);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(192, 57, 43, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(192, 57, 43, 0);
+  }
 }
 
 .small-btn {
@@ -312,12 +322,6 @@ tr.overdue-row td {
   color: var(--uw-blue-dark);
   border-color: #cfe3f3;
   background: #f4f9fd;
-}
-
-.small-btn.open {
-  color: #8b4d00;
-  border-color: #ffd4aa;
-  background: #fff8f1;
 }
 
 .small-btn.delete {
@@ -342,7 +346,6 @@ tr.overdue-row td {
   padding: 18px;
   background: #fbfdff;
   width: 100%;
-  margin-bottom: 14px;
 }
 
 .summary-kpis {
@@ -476,6 +479,7 @@ tr.overdue-row td {
 
   .hero {
     display: grid;
+    align-items: start;
   }
 
   .hero-actions {
