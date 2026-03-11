@@ -75,17 +75,11 @@
       margin-bottom: 10px;
     }
 
-    .logo-box {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--uw-blue) 0%, var(--uw-blue-dark) 100%);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-weight: 800;
-      box-shadow: 0 8px 24px rgba(68,139,202,.25);
-      flex-shrink: 0;
+    .logo-img {
+      height:56px;
+      width:auto;
+      object-fit:contain;
+      flex-shrink:0;
     }
 
     .eyebrow {
@@ -480,7 +474,7 @@
     <header class="hero">
       <div>
         <div class="brand-row">
-          <div class="logo-box">UNW</div>
+          <img src="assets/img/unwomen-logo.png" alt="UN Women" class="logo-img" />
           <div>
             <div class="eyebrow">ONU Femmes • Bureau de la Représentante</div>
             <h1>Gestion digitale du courrier</h1>
@@ -503,7 +497,10 @@
         <button class="btn danger" id="btnReset">Réinitialiser</button>
       </div>
     </header>
-     <section class="panel">
+
+    
+
+    <section class="panel">
       <div class="panel-header">
         <h2>Filtres et recherche</h2>
         <span class="muted" id="resultCount">0 élément(s)</span>
