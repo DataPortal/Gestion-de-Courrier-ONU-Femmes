@@ -32,6 +32,9 @@ const monthFilter = document.getElementById("monthFilter");
 const csvImport = document.getElementById("csvImport");
 const formTitle = document.getElementById("formTitle");
 const printArea = document.getElementById("printArea");
+const monthlySummary = document.getElementById("monthlySummary");
+const monthGrid = document.getElementById("monthGrid");
+const resultCount = document.getElementById("resultCount");
 
 bindEvents();
 render();
@@ -41,14 +44,12 @@ function bindEvents() {
   const btnCloseForm = document.getElementById("btnCloseForm");
   const btnCancelForm = document.getElementById("btnCancelForm");
   const btnExport = document.getElementById("btnExport");
-  const btnReset = document.getElementById("btnReset");
   const btnPrint = document.getElementById("btnPrint");
 
   if (btnNew) btnNew.addEventListener("click", () => openForm());
   if (btnCloseForm) btnCloseForm.addEventListener("click", closeForm);
   if (btnCancelForm) btnCancelForm.addEventListener("click", closeForm);
   if (btnExport) btnExport.addEventListener("click", exportCSV);
-  if (btnReset) btnReset.addEventListener("click", resetData);
   if (btnPrint) btnPrint.addEventListener("click", printPage);
 
   if (form) form.addEventListener("submit", handleSubmit);
@@ -81,6 +82,7 @@ function generateId() {
     if (!match) return max;
     return Math.max(max, parseInt(match[1], 10));
   }, 0);
+
   return `CR-${year}-${String(maxNum + 1).padStart(3, "0")}`;
 }
 
@@ -150,6 +152,7 @@ function closeForm() {
   editingId = null;
 
   if (formTitle) formTitle.textContent = "Nouveau courrier";
+
   const btnSave = document.getElementById("btnSave");
   if (btnSave) btnSave.textContent = "Enregistrer";
 }
@@ -195,11 +198,23 @@ function getMonthKey(dateStr) {
 
 function getMonthLabel(monthKey) {
   if (!monthKey || monthKey === "Sans date") return "Sans date";
+
   const [year, month] = monthKey.split("-");
   const months = [
-    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
   ];
+
   return `${months[parseInt(month, 10) - 1]} ${year}`;
 }
 
@@ -306,7 +321,6 @@ function render() {
         </td>
         <td>
           <button class="small-btn primary" data-edit-id="${escapeAttribute(record.id)}">Modifier</button>
-          <button class="small-btn open" data-open-scan="${escapeAttribute(record.id)}">Voir scan</button>
           <button class="small-btn delete" data-delete-id="${escapeAttribute(record.id)}">Supprimer</button>
         </td>
       `;
@@ -325,15 +339,10 @@ function render() {
     document.querySelectorAll("[data-edit-id]").forEach((button) => {
       button.addEventListener("click", handleEdit);
     });
-
-    document.querySelectorAll("[data-open-scan]").forEach((button) => {
-      button.addEventListener("click", handleOpenScan);
-    });
   }
 
   updateMonthlyDashboard();
 
-  const resultCount = document.getElementById("resultCount");
   if (resultCount) {
     resultCount.textContent = `${filtered.length} élément(s)`;
   }
@@ -368,54 +377,7 @@ function handleEdit(event) {
   openForm(record);
 }
 
-function handleOpenScan(event) {
-  const recordId = event.target.getAttribute("data-open-scan");
-  const record = records.find((r) => r.id === recordId);
-
-  if (!record || !record.cheminScan) {
-    alert("Aucun chemin de document scanné n’est renseigné pour ce courrier.");
-    return;
-  }
-
-  const path = record.cheminScan;
-  const fileUrl = convertLocalPathToFileUrl(path);
-
-  if (location.protocol === "file:") {
-    try {
-      window.open(fileUrl, "_blank");
-      return;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  if (
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("file:///")
-  ) {
-    window.open(path, "_blank");
-  } else {
-    alert(
-      "Le bouton Voir scan fonctionne surtout quand l’application est ouverte en local sur le PC. " +
-      "Depuis GitHub Pages, le navigateur ne peut généralement pas ouvrir directement un chemin local Windows.\n\n" +
-      "Chemin enregistré :\n" + path
-    );
-  }
-}
-
-function convertLocalPathToFileUrl(path) {
-  let normalized = String(path).replace(/\\/g, "/");
-  if (/^[A-Za-z]:\//.test(normalized)) {
-    normalized = "/" + normalized;
-  }
-  return "file://" + normalized;
-}
-
 function updateMonthlyDashboard() {
-  const monthlySummary = document.getElementById("monthlySummary");
-  const monthGrid = document.getElementById("monthGrid");
-
   if (!monthlySummary || !monthGrid) return;
 
   const total = records.length;
@@ -657,14 +619,6 @@ function parseCSV(text) {
   }
 
   return rows;
-}
-
-function resetData() {
-  if (!confirm("Réinitialiser toutes les données locales de l’application ?")) return;
-
-  records = [...defaultRecords];
-  saveRecords();
-  render();
 }
 
 function printPage() {
