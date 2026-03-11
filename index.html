@@ -169,7 +169,7 @@
 
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr;
       gap: 14px;
     }
 
@@ -215,8 +215,30 @@
     .monthly-summary {
       border: 1px solid var(--line);
       border-radius: 18px;
-      padding: 16px;
+      padding: 18px;
       background: #fbfdff;
+      width: 100%;
+    }
+
+    .summary-kpis {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .summary-kpi {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #ffffff;
+      min-height: 88px;
+    }
+
+    .summary-kpi strong {
+      display: block;
+      font-size: 24px;
+      margin-top: 6px;
     }
 
     input, select, textarea {
@@ -365,10 +387,13 @@
     @media (max-width: 1100px) {
       .stats,
       .filters,
-      .dashboard-grid,
       .month-grid,
       .form-grid {
         grid-template-columns: 1fr;
+      }
+
+      .summary-kpis {
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .hero {
@@ -378,6 +403,12 @@
       .hero-actions {
         justify-content: flex-start;
         min-width: auto;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .summary-kpis {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -1065,15 +1096,18 @@
       });
 
       monthlySummary.innerHTML = `
-        <h3 style="margin-bottom:10px;">Vue synthétique</h3>
-        <p class="subtitle" style="max-width:none; margin-bottom:14px;">
-          Ce tableau de bord mensuel donne une lecture rapide du volume de courrier, du niveau de traitement et des dossiers à risque de retard.
+        <h3 style="margin-bottom:10px;">Vue synthétique par mois de réception</h3>
+        <p class="subtitle" style="max-width:none; margin-bottom:6px;">
+          Lecture consolidée du registre pour suivre le volume de courrier, le niveau de traitement et les dossiers nécessitant une action rapide.
         </p>
-        <div class="month-kpis">
-          <div class="kpi-box"><span class="muted">Mois couverts</span><strong>${groups.length}</strong></div>
-          <div class="kpi-box"><span class="muted">Dossiers ouverts</span><strong>${totalOpen}</strong></div>
-          <div class="kpi-box"><span class="muted">Retards cumulés</span><strong>${totalOverdue}</strong></div>
-          <div class="kpi-box"><span class="muted">Mois le plus chargé</span><strong>${busiest ? escapeHtml(getMonthLabel(busiest.monthKey)) : '—'}</strong></div>
+        <div class="summary-kpis">
+          <div class="summary-kpi"><span class="muted">Total courriers</span><strong>${records.length}</strong></div>
+          <div class="summary-kpi"><span class="muted">En cours</span><strong>${records.filter((r) => r.statut === 'En cours').length}</strong></div>
+          <div class="summary-kpi"><span class="muted">Répondu</span><strong>${records.filter((r) => r.statut === 'Répondu').length}</strong></div>
+          <div class="summary-kpi"><span class="muted">Clos</span><strong>${records.filter((r) => r.statut === 'Clos').length}</strong></div>
+          <div class="summary-kpi"><span class="muted">Reçu</span><strong>${records.filter((r) => r.statut === 'Reçu').length}</strong></div>
+          <div class="summary-kpi"><span class="muted">Transmis</span><strong>${records.filter((r) => r.statut === 'Transmis').length}</strong></div>
+          <div class="summary-kpi"><span class="muted">En retard</span><strong>${records.filter((r) => isOverdue(r)).length}</strong></div>
         </div>
       `;
     }
