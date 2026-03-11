@@ -474,7 +474,8 @@
     <header class="hero">
       <div>
         <div class="brand-row">
-          <img src="assets/img/unwomen-logo.png" alt="UN Women" class="logo-img" />
+          <img src="assets/img/unwomen-logo.png" alt="UN Women" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid'" />
+          <div id="logoFallback" style="display:none;width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--uw-blue),var(--uw-blue-dark));color:#fff;font-weight:800;place-items:center;">UNW</div>
           <div>
             <div class="eyebrow">ONU Femmes • Bureau de la Représentante</div>
             <h1>Gestion digitale du courrier</h1>
@@ -1084,19 +1085,27 @@
         monthGrid.appendChild(card);
       });
 
+      const total = records.length;
+      const enCours = records.filter((r)=>r.statut==='En cours').length;
+      const repondu = records.filter((r)=>r.statut==='Répondu').length;
+      const clos = records.filter((r)=>r.statut==='Clos').length;
+      const recu = records.filter((r)=>r.statut==='Reçu').length;
+      const transmis = records.filter((r)=>r.statut==='Transmis').length;
+      const retard = records.filter((r)=>isOverdue(r)).length;
+
       monthlySummary.innerHTML = `
         <h3 style="margin-bottom:10px;">Vue synthétique par mois de réception</h3>
-        <p class="subtitle" style="max-width:none; margin-bottom:6px;">
-          Lecture consolidée du registre pour suivre le volume de courrier, le niveau de traitement et les dossiers nécessitant une action rapide.
+        <p class="subtitle" style="max-width:none;margin-bottom:10px;">
+          Indicateurs consolidés du registre de courrier pour le suivi administratif.
         </p>
         <div class="summary-kpis">
-          <div class="summary-kpi"><span class="muted">Total courriers</span><strong>${records.length}</strong></div>
-          <div class="summary-kpi"><span class="muted">En cours</span><strong>${records.filter((r) => r.statut === 'En cours').length}</strong></div>
-          <div class="summary-kpi"><span class="muted">Répondu</span><strong>${records.filter((r) => r.statut === 'Répondu').length}</strong></div>
-          <div class="summary-kpi"><span class="muted">Clos</span><strong>${records.filter((r) => r.statut === 'Clos').length}</strong></div>
-          <div class="summary-kpi"><span class="muted">Reçu</span><strong>${records.filter((r) => r.statut === 'Reçu').length}</strong></div>
-          <div class="summary-kpi"><span class="muted">Transmis</span><strong>${records.filter((r) => r.statut === 'Transmis').length}</strong></div>
-          <div class="summary-kpi"><span class="muted">En retard</span><strong>${records.filter((r) => isOverdue(r)).length}</strong></div>
+          <div class="summary-kpi"><span class="muted">Total courriers</span><strong>${total}</strong></div>
+          <div class="summary-kpi"><span class="muted">En cours</span><strong>${enCours}</strong></div>
+          <div class="summary-kpi"><span class="muted">Répondu</span><strong>${repondu}</strong></div>
+          <div class="summary-kpi"><span class="muted">Clos</span><strong>${clos}</strong></div>
+          <div class="summary-kpi"><span class="muted">Reçu</span><strong>${recu}</strong></div>
+          <div class="summary-kpi"><span class="muted">Transmis</span><strong>${transmis}</strong></div>
+          <div class="summary-kpi"><span class="muted">En retard</span><strong>${retard}</strong></div>
         </div>
       `;
     }
